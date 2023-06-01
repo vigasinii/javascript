@@ -1,0 +1,141 @@
+Initialize an empty dictionary outputDict to store the result.
+Create a list daysOfWeek containing the days of the week in the order [Mon, Tue, Wed, Thu, Fri, Sat, Sun].
+Iterate through each day in daysOfWeek:
+Initialize a variable total as 0 to store the sum of values for the current day.
+Check if the current day exists as a key in the input dictionary D. If it does, add the corresponding value to total.
+Check if the previous day and the next day exist as keys in D. If they do, add their corresponding values to total and increment the count by 1.
+If the previous day or the next day is missing in D, calculate the mean of the available days and add it to total.
+Store the total value in outputDict with the current day as the key.
+Return the outputDict.
+
+function solution(D) {
+  const outputDict = {};
+  const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+  for (let i = 0; i < daysOfWeek.length; i++) {
+    const currentDay = daysOfWeek[i];
+    let total = 0;
+    let count = 0;
+
+    if (D.hasOwnProperty(currentDay)) {
+      total += D[currentDay];
+      count++;
+    }
+
+    if (D.hasOwnProperty(daysOfWeek[i - 1])) {
+      total += D[daysOfWeek[i - 1]];
+      count++;
+    }
+
+    if (D.hasOwnProperty(daysOfWeek[i + 1])) {
+      total += D[daysOfWeek[i + 1]];
+      count++;
+    }
+
+    if (count === 0) {
+      total = 0; // If no values are available, set the total to 0
+    } else {
+      total /= count; // Calculate the mean if there are available values
+    }
+
+    outputDict[currentDay] = total;
+  }
+
+  return outputDict;
+}
+
+// Test case 1
+const D1 = {
+  '2020-01-01': 4,
+  '2020-01-02': 4,
+  '2020-01-03': 6,
+  '2020-01-04': 8,
+  '2020-01-05': 2,
+  '2020-01-06': -6,
+  '2020-01-07': 2,
+  '2020-01-08': -2,
+};
+console.log(solution(D1));
+
+// Test case 2
+const D2 = {
+  '2020-01-01': 6,
+  '2020-01-04': 12,
+  '2020-01-05': 14,
+  '2020-01-06': 2,
+  '2020-01-07': 4,
+};
+console.log(solution(D2));
+
+
+unit tests
+
+// Import the assertion library
+const assert = require('assert');
+
+// Test case 1
+const D1 = {
+  '2020-01-01': 4,
+  '2020-01-02': 4,
+  '2020-01-03': 6,
+  '2020-01-04': 8,
+  '2020-01-05': 2,
+  '2020-01-06': -6,
+  '2020-01-07': 2,
+  '2020-01-08': -2,
+};
+const result1 = solution(D1);
+const expectedResult1 = {
+  'Mon': -6,
+  'Tue': 2,
+  'Wed': 2,
+  'Thu': 4,
+  'Fri': 6,
+  'Sat': 8,
+  'Sun': 2,
+};
+assert.deepStrictEqual(result1, expectedResult1, 'Test case 1 failed');
+
+// Test case 2
+const D2 = {
+  '2020-01-01': 6,
+  '2020-01-04': 12,
+  '2020-01-05': 14,
+  '2020-01-06': 2,
+  '2020-01-07': 4,
+};
+const result2 = solution(D2);
+const expectedResult2 = {
+  'Mon': 2,
+  'Tue': 4,
+  'Wed': 6,
+  'Thu': 8,
+  'Fri': 10,
+  'Sat': 12,
+  'Sun': 14,
+};
+assert.deepStrictEqual(result2, expectedResult2, 'Test case 2 failed');
+
+// Additional test case
+const D3 = {
+  '2020-01-01': 1,
+  '2020-01-02': 2,
+  '2020-01-04': 4,
+  '2020-01-05': 5,
+  '2020-01-06': 6,
+  '2020-01-07': 7,
+  '2020-01-08': 8,
+};
+const result3 = solution(D3);
+const expectedResult3 = {
+  'Mon': 2,
+  'Tue': 3,
+  'Wed': 4,
+  'Thu': 5,
+  'Fri': 6,
+  'Sat': 7,
+  'Sun': 8,
+};
+assert.deepStrictEqual(result3, expectedResult3, 'Test case 3 failed');
+
+console.log('All test cases passed!');
